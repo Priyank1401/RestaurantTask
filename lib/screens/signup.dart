@@ -50,6 +50,7 @@ class _SignupScreenState extends State<SignupScreen> {
             ElevatedButton(
               onPressed: () async {
                 final message = await AuthService().registration(
+                  context: context,
                   email: _emailController.text,
                   password: _passwordController.text,
                 );

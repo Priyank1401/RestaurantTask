@@ -16,6 +16,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset : false,
       appBar: AppBar(
         title: const Text('Login'),
         centerTitle: true,
@@ -49,7 +50,9 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             ElevatedButton(
               onPressed: () async {
+                FocusManager.instance.primaryFocus?.unfocus();
                 final message = await AuthService().login(
+                  context: context,
                   email: _emailController.text,
                   password: _passwordController.text,
                 );
@@ -80,6 +83,47 @@ class _LoginScreenState extends State<LoginScreen> {
                 );
               },
               child: const Text('Create Account'),
+            ),
+            const SizedBox(
+              height: 30.0,
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                final message = await AuthService().googleLogin(context);
+                if (message!.contains('Success')) {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => const HomeScreen(),
+                    ),
+                  );
+                }
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(message),
+                  ),
+                );
+              },
+              child: const Text('Continue using Gmail'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                final message = await AuthService().facebookLogin(context);
+                print('>>>>');
+                print(message);
+                if (message!.contains('Success')) {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => const HomeScreen(),
+                    ),
+                  );
+                }
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(message),
+                  ),
+                );
+              },
+              child: const Text('Continue using Facebook'),
             ),
           ],
         ),

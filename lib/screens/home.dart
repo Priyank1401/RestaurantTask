@@ -11,14 +11,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late User user;
+  User? user;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_){
       setState(() {
-        user = FirebaseAuth.instance.currentUser!;
+        user = FirebaseAuth.instance.currentUser;
       });
     });
   }
@@ -45,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: Center(
-        child: Text('Welcome ! ${user.email}'),
+        child: Text('Welcome ! ${user?.email}'),
       ),
     );
   }
